@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Electric Outrush — Core Diagram</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --void: #020408;
+  --cyan: #00e8c8;
+  --lime: #b8f000;
+  --amber: #f0a000;
+  --blue: #0066ff;
+  --violet: #8844ff;
+  --rose: #ff3366;
+  --steel: #334466;
+  --white: #ddeeff;
+  --dim: rgba(0,232,200,0.08);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; min-height:100vh; background:var(--void); color:var(--white); font-family:'DM Mono', monospace; overflow-x:hidden; }
+
+body { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:60px 24px 80px; }
+
+/* ── HEADER ── */
+.doc-header { width:100%; max-width:1100px; margin-bottom:64px; display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid rgba(0,232,200,0.12); padding-bottom:24px; }
+.doc-title { font-family:'Syne',sans-serif; font-size:13px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.5); }
+.doc-meta { font-size:10px; letter-spacing:.15em; color:rgba(221,238,255,.2); text-transform:uppercase; text-align:right; line-height:1.8; }
+
+/* ── MAIN DIAGRAM CONTAINER ── */
+.diagram-wrap { width:100%; max-width:900px; position:relative; margin:0 auto; }
+
+/* ── SVG DIAGRAM ── */
+.core-svg { width:100%; height:auto; display:block; }
+
+/* ── LAYER CARDS — flanking panels ── */
+.layers-grid { display:grid; grid-template-columns:1fr 640px 1fr; gap:0; margin-top:0; align-items:center; }
+
+.layer-col { display:flex; flex-direction:column; gap:12px; padding:0 20px; }
+.layer-col.right { align-items:flex-start; }
+.layer-col.left { align-items:flex-end; }
+
+.layer-card {
+  border:1px solid rgba(0,232,200,.12);
+  padding:14px 16px;
+  background:rgba(2,4,8,.7);
+  backdrop-filter:blur(8px);
+  position:relative;
+  width:220px;
+  transition:border-color .25s, box-shadow .25s;
+  cursor:default;
+}
+.layer-card:hover { border-color:rgba(0,232,200,.35); box-shadow:0 0 20px rgba(0,232,200,.04); }
+
+.layer-card::before {
+  content:''; position:absolute; top:50%; width:40px; height:1px;
+  background:linear-gradient(to right, transparent, rgba(0,232,200,.2));
+}
+.layer-col.left .layer-card::before { right:-40px; }
+.layer-col.right .layer-card::before { left:-40px; background:linear-gradient(to left, transparent, rgba(0,232,200,.2)); }
+
+.lc-num { font-size:9px; letter-spacing:.2em; margin-bottom:6px; opacity:.35; }
+.lc-name { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; margin-bottom:4px; letter-spacing:.02em; }
+.lc-desc { font-size:9px; line-height:1.6; color:rgba(221,238,255,.35); letter-spacing:.05em; }
+.lc-score { margin-top:8px; display:flex; align-items:center; gap:8px; }
+.lc-bar { flex:1; height:2px; background:rgba(221,238,255,.06); position:relative; }
+.lc-fill { position:absolute; top:0; left:0; height:100%; }
+.lc-val { font-size:9px; color:rgba(221,238,255,.3); }
+
+/* ── THESIS ── */
+.thesis-block { width:100%; max-width:900px; margin-top:64px; border:1px solid rgba(0,232,200,.1); padding:40px 48px; background:rgba(0,232,200,.02); }
+.thesis-label { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:20px; }
+.thesis-text { font-family:'Syne',sans-serif; font-size:clamp(18px,2.5vw,26px); font-weight:700; line-height:1.35; letter-spacing:-.01em; color:var(--white); }
+.thesis-text em { color:var(--cyan); font-style:normal; }
+
+/* ── DOCTRINE ── */
+.doctrine-grid { width:100%; max-width:900px; margin-top:40px; display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+.doctrine-cell { border:1px solid rgba(0,232,200,.08); padding:24px; background:rgba(2,4,8,.5); }
+.dc-label { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(0,232,200,.35); margin-bottom:10px; }
+.dc-val { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--white); line-height:1.3; }
+
+/* ── VECTOR TABLE ── */
+.vector-table { width:100%; max-width:900px; margin-top:40px; border:1px solid rgba(0,232,200,.1); }
+.vt-head { display:grid; grid-template-columns:2fr 1fr 1fr 3fr; padding:12px 24px; border-bottom:1px solid rgba(0,232,200,.1); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(221,238,255,.2); }
+.vt-row { display:grid; grid-template-columns:2fr 1fr 1fr 3fr; padding:14px 24px; border-bottom:1px solid rgba(0,232,200,.05); align-items:center; transition:background .15s; }
+.vt-row:last-child { border-bottom:none; }
+.vt-row:hover { background:rgba(0,232,200,.02); }
+.vt-name { font-size:12px; font-weight:500; }
+.vt-weight { font-size:11px; color:rgba(221,238,255,.4); }
+.vt-score { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; }
+.vt-note { font-size:10px; line-height:1.5; color:rgba(221,238,255,.3); }
+
+/* ── ACQUISITION SEAL ── */
+.acq-seal { width:100%; max-width:900px; margin-top:40px; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; border:1px solid rgba(0,232,200,.15); padding:32px 40px; background:rgba(0,232,200,.02); }
+.acq-left {}
+.acq-tag { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:10px; }
+.acq-domain { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; letter-spacing:-.02em; color:var(--cyan); }
+.acq-sub { font-size:10px; color:rgba(221,238,255,.25); margin-top:6px; line-height:1.7; letter-spacing:.05em; }
+.acq-btn { display:inline-block; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:#020408; background:var(--cyan); padding:12px 28px; text-decoration:none; white-space:nowrap; transition:opacity .2s; }
+.acq-btn:hover { opacity:.85; }
+
+/* ── FOOTNOTE ── */
+.footnote { width:100%; max-width:900px; margin-top:48px; padding-top:24px; border-top:1px solid rgba(0,232,200,.08); display:flex; justify-content:space-between; font-size:9px; letter-spacing:.12em; color:rgba(221,238,255,.15); text-transform:uppercase; }
+
+/* ── ANIMATIONS ── */
+@keyframes orbitSpin { from{transform-origin:center;transform:rotate(0deg)} to{transform-origin:center;transform:rotate(360deg)} }
+@keyframes orbitSpinR { from{transform-origin:center;transform:rotate(0deg)} to{transform-origin:center;transform:rotate(-360deg)} }
+@keyframes pulse { 0%,100%{opacity:.6} 50%{opacity:1} }
+@keyframes corePulse { 0%,100%{r:38} 50%{r:42} }
+@keyframes dash { to{stroke-dashoffset:-200} }
+
+.orbit-1 { animation:orbitSpin 40s linear infinite; transform-origin:450px 450px; }
+.orbit-2 { animation:orbitSpinR 55s linear infinite; transform-origin:450px 450px; }
+.orbit-3 { animation:orbitSpin 75s linear infinite; transform-origin:450px 450px; }
+.orbit-4 { animation:orbitSpinR 95s linear infinite; transform-origin:450px 450px; }
+.ring-pulse { animation:pulse 3s ease-in-out infinite; }
+.dash-anim { stroke-dasharray:8 6; animation:dash 3s linear infinite; }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="doc-title">EVOutrush — The Electric Outrush Core Diagram</div>
+  <div class="doc-meta">Visual Ontology v1.0<br>Conceptual IP · EVOutrush.com<br>Q2 2025</div>
+</div>
+
+<!-- ── MAIN DIAGRAM ── -->
+<div class="layers-grid">
+
+  <!-- LEFT CARDS -->
+  <div class="layer-col left">
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 01</div>
+      <div class="lc-name" style="color:#00e8c8">Adoption Velocity</div>
+      <div class="lc-desc">Rate of EV penetration per market cycle. The outrush begins here.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:81%;background:#00e8c8"></div></div>
+        <div class="lc-val">81</div>
+      </div>
+    </div>
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 02</div>
+      <div class="lc-name" style="color:#b8f000">Charging Density</div>
+      <div class="lc-desc">Public infrastructure depth relative to vehicle stock and geography.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:68%;background:#b8f000"></div></div>
+        <div class="lc-val">68</div>
+      </div>
+    </div>
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 03</div>
+      <div class="lc-name" style="color:#f0a000">Fleet Conversion</div>
+      <div class="lc-desc">B2B electrification pressure across logistics, municipal, and commercial fleets.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:59%;background:#f0a000"></div></div>
+        <div class="lc-val">59</div>
+      </div>
+    </div>
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 04</div>
+      <div class="lc-name" style="color:#0066ff">Grid Readiness</div>
+      <div class="lc-desc">Electrical infrastructure capacity to absorb EV demand without systemic strain.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:63%;background:#0066ff"></div></div>
+        <div class="lc-val">63</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SVG CORE DIAGRAM -->
+  <div class="diagram-wrap">
+    <svg class="core-svg" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Radial glow -->
+        <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#00e8c8" stop-opacity="0.25"/>
+          <stop offset="60%" stop-color="#00e8c8" stop-opacity="0.04"/>
+          <stop offset="100%" stop-color="#00e8c8" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="coreFill" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#0a2030"/>
+          <stop offset="100%" stop-color="#020810"/>
+        </radialGradient>
+        <!-- Orbit gradients -->
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00e8c8" stop-opacity=".6"/>
+          <stop offset="50%" stop-color="#00e8c8" stop-opacity=".1"/>
+          <stop offset="100%" stop-color="#00e8c8" stop-opacity=".6"/>
+        </linearGradient>
+        <linearGradient id="g2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#b8f000" stop-opacity=".5"/>
+          <stop offset="50%" stop-color="#b8f000" stop-opacity=".08"/>
+          <stop offset="100%" stop-color="#b8f000" stop-opacity=".5"/>
+        </linearGradient>
+        <linearGradient id="g3" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#8844ff" stop-opacity=".4"/>
+          <stop offset="50%" stop-color="#8844ff" stop-opacity=".06"/>
+          <stop offset="100%" stop-color="#8844ff" stop-opacity=".4"/>
+        </linearGradient>
+        <linearGradient id="g4" x1="100%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#0066ff" stop-opacity=".4"/>
+          <stop offset="50%" stop-color="#0066ff" stop-opacity=".05"/>
+          <stop offset="100%" stop-color="#0066ff" stop-opacity=".4"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="softGlow">
+          <feGaussianBlur stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="coreFilter">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="clip"><circle cx="450" cy="450" r="400"/></clipPath>
+      </defs>
+
+      <!-- Background atmosphere -->
+      <rect width="900" height="900" fill="#020408"/>
+      <circle cx="450" cy="450" r="380" fill="url(#coreGlow)" opacity=".6"/>
+
+      <!-- Grid texture -->
+      <g opacity=".06" stroke="#00e8c8" stroke-width=".5">
+        <line x1="0" y1="450" x2="900" y2="450"/>
+        <line x1="450" y1="0" x2="450" y2="900"/>
+        <line x1="0" y1="225" x2="900" y2="225"/>
+        <line x1="0" y1="675" x2="900" y2="675"/>
+        <line x1="225" y1="0" x2="225" y2="900"/>
+        <line x1="675" y1="0" x2="675" y2="900"/>
+      </g>
+
+      <!-- ORBIT RING 4 — outermost — Battery Chain -->
+      <g class="orbit-4">
+        <circle cx="450" cy="450" r="340" fill="none" stroke="url(#g3)" stroke-width="1" opacity=".4"/>
+        <circle cx="450" cy="110" r="6" fill="#8844ff" opacity=".8" filter="url(#glow)"/>
+        <circle cx="450" cy="790" r="4" fill="#8844ff" opacity=".5"/>
+        <circle cx="110" cy="450" r="5" fill="#8844ff" opacity=".6"/>
+        <!-- Dashed texture -->
+        <circle cx="450" cy="450" r="340" fill="none" stroke="#8844ff" stroke-width=".4" opacity=".15" stroke-dasharray="4 8" class="dash-anim"/>
+      </g>
+
+      <!-- ORBIT RING 3 — Policy Momentum -->
+      <g class="orbit-3">
+        <circle cx="450" cy="450" r="270" fill="none" stroke="url(#g4)" stroke-width="1" opacity=".5"/>
+        <circle cx="450" cy="180" r="5" fill="#0066ff" opacity=".9" filter="url(#glow)"/>
+        <circle cx="720" cy="450" r="5" fill="#0066ff" opacity=".7"/>
+        <circle cx="450" cy="720" r="4" fill="#0066ff" opacity=".5"/>
+        <circle cx="180" cy="450" r="4" fill="#0066ff" opacity=".5"/>
+      </g>
+
+      <!-- ORBIT RING 2 — Fleet + Grid -->
+      <g class="orbit-2">
+        <circle cx="450" cy="450" r="200" fill="none" stroke="url(#g2)" stroke-width="1.2" opacity=".6"/>
+        <circle cx="450" cy="250" r="6" fill="#b8f000" opacity=".9" filter="url(#glow)"/>
+        <circle cx="650" cy="450" r="5" fill="#f0a000" opacity=".8"/>
+        <circle cx="450" cy="650" r="6" fill="#b8f000" opacity=".7"/>
+        <circle cx="250" cy="450" r="5" fill="#f0a000" opacity=".7"/>
+      </g>
+
+      <!-- ORBIT RING 1 — innermost — Adoption -->
+      <g class="orbit-1">
+        <circle cx="450" cy="450" r="130" fill="none" stroke="url(#g1)" stroke-width="1.5" opacity=".7"/>
+        <circle cx="450" cy="320" r="7" fill="#00e8c8" opacity="1" filter="url(#softGlow)"/>
+        <circle cx="580" cy="450" r="6" fill="#00e8c8" opacity=".85"/>
+        <circle cx="450" cy="580" r="7" fill="#00e8c8" opacity=".9"/>
+        <circle cx="320" cy="450" r="6" fill="#00e8c8" opacity=".8"/>
+      </g>
+
+      <!-- Radial spokes — faint energy lines -->
+      <g opacity=".12" stroke="#00e8c8" stroke-width=".6" class="ring-pulse">
+        <line x1="450" y1="450" x2="450" y2="80"/>
+        <line x1="450" y1="450" x2="820" y2="450"/>
+        <line x1="450" y1="450" x2="450" y2="820"/>
+        <line x1="450" y1="450" x2="80" y2="450"/>
+        <line x1="450" y1="450" x2="677" y2="223"/>
+        <line x1="450" y1="450" x2="677" y2="677"/>
+        <line x1="450" y1="450" x2="223" y2="677"/>
+        <line x1="450" y1="450" x2="223" y2="223"/>
+      </g>
+
+      <!-- Static reference rings -->
+      <circle cx="450" cy="450" r="85" fill="none" stroke="#00e8c8" stroke-width=".5" opacity=".2"/>
+      <circle cx="450" cy="450" r="130" fill="none" stroke="#00e8c8" stroke-width=".3" opacity=".1"/>
+      <circle cx="450" cy="450" r="200" fill="none" stroke="#00e8c8" stroke-width=".3" opacity=".08"/>
+      <circle cx="450" cy="450" r="270" fill="none" stroke="#00e8c8" stroke-width=".3" opacity=".06"/>
+      <circle cx="450" cy="450" r="340" fill="none" stroke="#00e8c8" stroke-width=".3" opacity=".05"/>
+
+      <!-- CORE — Electric Mobility Node -->
+      <circle cx="450" cy="450" r="80" fill="url(#coreFill)" stroke="#00e8c8" stroke-width="1" opacity=".9" filter="url(#coreFilter)"/>
+      <circle cx="450" cy="450" r="72" fill="none" stroke="#00e8c8" stroke-width=".4" opacity=".4"/>
+      <circle cx="450" cy="450" r="60" fill="none" stroke="#00e8c8" stroke-width=".3" opacity=".25" stroke-dasharray="3 5"/>
+
+      <!-- Core glow pulse -->
+      <circle cx="450" cy="450" r="80" fill="#00e8c8" opacity=".03" class="ring-pulse"/>
+
+      <!-- EV Lightning bolt symbol -->
+      <g filter="url(#glow)" opacity=".9">
+        <polyline points="460,415 440,450 455,450 440,485" fill="none" stroke="#00e8c8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+
+      <!-- Core label -->
+      <text x="450" y="510" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#00e8c8" opacity=".5" letter-spacing="3">ELECTRIC CORE</text>
+
+      <!-- EVOI Score badge -->
+      <g>
+        <rect x="390" y="370" width="120" height="28" rx="2" fill="#020810" stroke="#00e8c8" stroke-width=".5" opacity=".7"/>
+        <text x="450" y="389" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#00e8c8" opacity=".6" letter-spacing="2">EVOI 74 / 100</text>
+      </g>
+
+      <!-- VECTOR LABELS — floating around orbits -->
+      <!-- V1 Adoption -->
+      <g>
+        <text x="450" y="96" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#00e8c8" opacity=".7" letter-spacing="1.5">01 · ADOPTION VELOCITY</text>
+      </g>
+      <!-- V2 Charging -->
+      <g>
+        <text x="450" y="232" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#b8f000" opacity=".7" letter-spacing="1.5">02 · CHARGING DENSITY</text>
+      </g>
+      <!-- V3 Fleet right -->
+      <g transform="rotate(90, 450, 450)">
+        <text x="450" y="232" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#f0a000" opacity=".65" letter-spacing="1.5">03 · FLEET CONVERSION</text>
+      </g>
+      <!-- V4 Grid bottom -->
+      <g transform="rotate(180, 450, 450)">
+        <text x="450" y="232" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#0066ff" opacity=".65" letter-spacing="1.5">04 · GRID READINESS</text>
+      </g>
+      <!-- V5 Battery — outer ring top -->
+      <g>
+        <text x="450" y="68" text-anchor="middle" font-family="DM Mono" font-size="7.5" fill="#8844ff" opacity=".6" letter-spacing="1.5">05 · BATTERY CHAIN</text>
+      </g>
+      <!-- V6 Policy — outer right -->
+      <g transform="rotate(80, 450, 450)">
+        <text x="450" y="68" text-anchor="middle" font-family="DM Mono" font-size="7.5" fill="#0066ff" opacity=".55" letter-spacing="1.5">06 · POLICY MOMENTUM</text>
+      </g>
+      <!-- V7 Capital — outer left -->
+      <g transform="rotate(-80, 450, 450)">
+        <text x="450" y="68" text-anchor="middle" font-family="DM Mono" font-size="7.5" fill="#ff3366" opacity=".55" letter-spacing="1.5">07 · CAPITAL COMMITMENT</text>
+      </g>
+
+      <!-- Perimeter arc label -->
+      <path id="arcLabel" d="M 110 450 A 340 340 0 0 1 790 450" fill="none"/>
+      <text font-family="DM Mono" font-size="7" fill="#00e8c8" opacity=".18" letter-spacing="4">
+        <textPath href="#arcLabel" startOffset="5%">THE ELECTRIC OUTRUSH MODEL · EVOUTRUSH.COM · CONCEPTUAL IP · SOVEREIGN ASSET ·</textPath>
+      </text>
+
+      <!-- Bottom arc -->
+      <path id="arcLabel2" d="M 110 450 A 340 340 0 0 0 790 450" fill="none"/>
+      <text font-family="DM Mono" font-size="7" fill="#00e8c8" opacity=".12" letter-spacing="4">
+        <textPath href="#arcLabel2" startOffset="5%">EVOI METHODOLOGY · MARKET INTELLIGENCE · REFERENCE AUTHORITY · SPATIAL DOCTRINE ·</textPath>
+      </text>
+    </svg>
+  </div>
+
+  <!-- RIGHT CARDS -->
+  <div class="layer-col right">
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 05</div>
+      <div class="lc-name" style="color:#8844ff">Battery Chain</div>
+      <div class="lc-desc">Supply chain sovereignty — minerals, cells, manufacturing, recycling.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:72%;background:#8844ff"></div></div>
+        <div class="lc-val">72</div>
+      </div>
+    </div>
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 06</div>
+      <div class="lc-name" style="color:#0066ff">Policy Momentum</div>
+      <div class="lc-desc">Regulatory coherence — ICE bans, ZEV mandates, AFIR compliance.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:71%;background:#0066ff"></div></div>
+        <div class="lc-val">71</div>
+      </div>
+    </div>
+    <div class="layer-card">
+      <div class="lc-num">VECTOR 07</div>
+      <div class="lc-name" style="color:#ff3366">Capital Commitment</div>
+      <div class="lc-desc">Investment flow density — public, private, sovereign, and industrial capital.</div>
+      <div class="lc-score">
+        <div class="lc-bar"><div class="lc-fill" style="width:76%;background:#ff3366"></div></div>
+        <div class="lc-val">76</div>
+      </div>
+    </div>
+    <div class="layer-card" style="border-color:rgba(0,232,200,.25); background:rgba(0,232,200,.03)">
+      <div class="lc-num">COMPOSITE</div>
+      <div class="lc-name" style="color:#00e8c8; font-size:16px;">EVOI 74</div>
+      <div class="lc-desc">Global EV Outrush Index — Q2 2025<br>Phase: Acceleration</div>
+      <div class="lc-score" style="margin-top:10px;">
+        <div class="lc-bar"><div class="lc-fill" style="width:74%;background:linear-gradient(to right,#00e8c8,#b8f000)"></div></div>
+        <div class="lc-val">/100</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── THESIS ── -->
+<div class="thesis-block">
+  <div class="thesis-label">The Electric Outrush Thesis · EVOutrush.com</div>
+  <div class="thesis-text">
+    <em>EVOutrush</em> maps the outward rush of electric mobility — from the vehicle into charging networks, fleets, grids, batteries, policy, capital, and industrial strategy. <em>Not a trend. A structural outrush.</em>
+  </div>
+</div>
+
+<!-- ── DOCTRINE CELLS ── -->
+<div class="doctrine-grid">
+  <div class="doctrine-cell">
+    <div class="dc-label">Visual Doctrine</div>
+    <div class="dc-val">Spatial Intelligence Language — not dashboard, not gaming. A navigable reference environment.</div>
+  </div>
+  <div class="doctrine-cell">
+    <div class="dc-label">Conceptual IP</div>
+    <div class="dc-val">The EV Outrush Model · EVOI Methodology · Seven-Vector Framework · Signal Ledger</div>
+  </div>
+  <div class="doctrine-cell">
+    <div class="dc-label">Acquisition Logic</div>
+    <div class="dc-val">Owning EVOutrush is owning the category definition of the global EV transition.</div>
+  </div>
+</div>
+
+<!-- ── VECTOR TABLE ── -->
+<div class="vector-table">
+  <div class="vt-head">
+    <span>Vector</span><span>Weight</span><span>Score</span><span>Strategic Meaning</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#00e8c8">Adoption Velocity</span>
+    <span class="vt-weight">20%</span>
+    <span class="vt-score" style="color:#00e8c8">81</span>
+    <span class="vt-note">The outrush begins when adoption crosses self-reinforcing thresholds. Norway: 82%. China: 37%. The inflection is global.</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#b8f000">Charging Density</span>
+    <span class="vt-weight">18%</span>
+    <span class="vt-score" style="color:#b8f000">68</span>
+    <span class="vt-note">Infrastructure density determines whether adoption sustains. 10M public chargers reached Q1 2025. China holds 65% of global stock.</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#f0a000">Fleet Conversion</span>
+    <span class="vt-weight">15%</span>
+    <span class="vt-score" style="color:#f0a000">59</span>
+    <span class="vt-note">B2B electrification is the next pressure wave. Last-mile, municipal, logistics — the ICE fleet is the next outrush target.</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#0066ff">Grid Readiness</span>
+    <span class="vt-weight">15%</span>
+    <span class="vt-score" style="color:#0066ff">63</span>
+    <span class="vt-note">EV load is moving from the vehicle to the grid. V2G, smart charging, and peak load management define the next infrastructure battle.</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#8844ff">Battery Chain</span>
+    <span class="vt-weight">14%</span>
+    <span class="vt-score" style="color:#8844ff">72</span>
+    <span class="vt-note">Below $80/kWh: structural price parity achieved. LFP dominance, sodium-ion emergence, European battery sovereignty at €109B invested.</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#0066ff">Policy Momentum</span>
+    <span class="vt-weight">10%</span>
+    <span class="vt-score" style="color:#0066ff">71</span>
+    <span class="vt-note">EU 2035 ICE ban confirmed. US policy split remains the primary risk vector. China NEV policy is structurally stable.</span>
+  </div>
+  <div class="vt-row">
+    <span class="vt-name" style="color:#ff3366">Capital Commitment</span>
+    <span class="vt-weight">8%</span>
+    <span class="vt-score" style="color:#ff3366">76</span>
+    <span class="vt-note">$500B+ in committed EV/infrastructure capital globally. Sovereign wealth, private equity, OEM capex — the money has already moved.</span>
+  </div>
+</div>
+
+<!-- ── ACQUISITION SEAL ── -->
+<div class="acq-seal">
+  <div class="acq-left">
+    <div class="acq-tag">Strategic Asset · Private Acquisition Channel</div>
+    <div class="acq-domain">EVOutrush.com</div>
+    <div class="acq-sub">
+      Domain · Conceptual IP · EVOI Methodology · Seven-Vector Framework<br>
+      Visual Doctrine · Market Atlas · Signal Ledger · Acquisition Logic
+    </div>
+  </div>
+  <a href="mailto:agent@sohadot.com" class="acq-btn">Request Strategic Brief →</a>
+</div>
+
+<div class="footnote">
+  <span>© EVOutrush · Conceptual IP · All rights reserved</span>
+  <span>Visual Ontology v1.0 · Q2 2025</span>
+  <span>agent@sohadot.com · sohadot.com</span>
+</div>
+
+</body>
+</html>
