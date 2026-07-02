@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply the Standard — Classification Statement Composer | Outrush Readiness</title>
+<meta name="description" content="Describe your own configuration and generate a conformant Outrush Readiness classification statement (O0–O5) per the governing specification v1.0. A specification-only instrument — it classifies the configuration you describe, not any vendor.">
+<link rel="canonical" href="https://evoutrush.com/apply/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EVOutrush">
+<meta property="og:title" content="Apply the Standard — Classification Statement Composer">
+<meta property="og:description" content="Describe your own configuration and generate a conformant Outrush Readiness classification statement (O0–O5) per the governing specification v1.0.">
+<meta property="og:url" content="https://evoutrush.com/apply/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apply the Standard — Classification Statement Composer">
+<meta name="twitter:description" content="Generate a conformant Outrush Readiness classification statement (O0–O5) for a configuration you describe.">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --void:#020408; --cyan:#00e8c8; --lime:#b8f000; --amber:#f0a000;
+  --blue:#0066ff; --violet:#8844ff; --steel:#556688; --white:#ddeeff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+html,body { width:100%; min-height:100vh; background:var(--void); color:var(--white); font-family:'DM Mono',monospace; overflow-x:hidden; }
+body { display:flex; flex-direction:column; align-items:center; padding:60px 24px 80px; }
+a { color:var(--cyan); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+.doc-header { width:100%; max-width:900px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid rgba(0,232,200,.12); padding-bottom:24px; gap:24px; flex-wrap:wrap; }
+.doc-title { font-family:'Syne',sans-serif; font-size:13px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.5); }
+.doc-meta { font-size:10px; letter-spacing:.15em; color:rgba(221,238,255,.2); text-transform:uppercase; text-align:right; line-height:1.8; }
+.crumb { width:100%; max-width:900px; margin-bottom:36px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(221,238,255,.3); }
+
+.intro { width:100%; max-width:900px; margin-bottom:36px; }
+.intro h1 { font-family:'Syne',sans-serif; font-size:clamp(22px,3vw,32px); font-weight:800; letter-spacing:-.01em; line-height:1.2; margin-bottom:16px; }
+.intro h1 em { color:var(--cyan); font-style:normal; }
+.intro p { font-size:13px; line-height:1.8; color:rgba(221,238,255,.55); margin-bottom:10px; }
+.intro .guard { font-size:11px; color:rgba(240,160,0,.8); line-height:1.7; border-left:2px solid rgba(240,160,0,.4); padding-left:14px; margin-top:14px; }
+
+.composer { width:100%; max-width:900px; display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+.panel { border:1px solid rgba(0,232,200,.1); background:rgba(2,4,8,.5); padding:28px 30px; }
+.panel-label { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:22px; }
+
+.field { margin-bottom:20px; }
+.field label { display:block; font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:rgba(221,238,255,.4); margin-bottom:7px; }
+.field input, .field textarea {
+  width:100%; background:rgba(2,4,8,.8); border:1px solid rgba(0,232,200,.15); color:var(--white);
+  font-family:'DM Mono',monospace; font-size:12px; padding:11px 13px; letter-spacing:.02em; line-height:1.6;
+}
+.field textarea { resize:vertical; min-height:64px; }
+.field input:focus, .field textarea:focus { outline:none; border-color:rgba(0,232,200,.5); }
+.field .hint { font-size:9px; color:rgba(221,238,255,.25); margin-top:5px; line-height:1.5; }
+
+.gates { margin-top:6px; }
+.gate { border:1px solid rgba(0,232,200,.08); border-left-width:3px; padding:12px 14px; margin-bottom:2px; background:rgba(2,4,8,.4); cursor:pointer; display:block; transition:background .15s; }
+.gate:hover { background:rgba(0,232,200,.03); }
+.gate input { position:absolute; opacity:0; pointer-events:none; }
+.gate .g-head { display:flex; align-items:baseline; gap:10px; }
+.gate .g-box { width:14px; height:14px; border:1px solid rgba(0,232,200,.4); flex:0 0 14px; margin-top:2px; position:relative; }
+.gate input:checked + .g-head .g-box::after { content:''; position:absolute; inset:2px; background:var(--cyan); }
+.gate .g-code { font-family:'Syne',sans-serif; font-size:13px; font-weight:800; }
+.gate .g-name { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--white); }
+.gate .g-cond { font-size:10px; line-height:1.6; color:rgba(221,238,255,.45); margin-top:7px; padding-left:24px; }
+.gate.capped { opacity:.4; }
+.gate.capped .g-name::after { content:' · gated'; color:rgba(240,160,0,.7); font-size:9px; }
+
+.dims { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:6px; }
+.dim { border:1px solid rgba(0,232,200,.08); padding:11px 13px; cursor:pointer; display:flex; align-items:center; gap:9px; background:rgba(2,4,8,.4); transition:background .15s; }
+.dim:hover { background:rgba(0,232,200,.03); }
+.dim input { position:absolute; opacity:0; pointer-events:none; }
+.dim .d-box { width:13px; height:13px; border:1px solid rgba(0,232,200,.4); flex:0 0 13px; position:relative; }
+.dim input:checked + .d-box::after { content:''; position:absolute; inset:2px; background:var(--cyan); }
+.dim .d-txt { font-size:10px; letter-spacing:.03em; }
+.dim .d-txt b { font-family:'Syne',sans-serif; font-weight:700; }
+
+/* OUTPUT */
+.output-wrap { width:100%; max-width:900px; margin-top:2px; }
+.result-level { border:1px solid rgba(0,232,200,.15); padding:22px 30px; background:rgba(0,232,200,.02); display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+.rl-tag { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); }
+.rl-code { font-family:'Syne',sans-serif; font-size:34px; font-weight:800; letter-spacing:-.02em; line-height:1; }
+.rl-name { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--white); }
+.rl-read { font-size:10px; color:rgba(221,238,255,.4); line-height:1.6; flex:1; min-width:200px; }
+
+.statement { border:1px solid rgba(0,232,200,.1); border-top:none; padding:26px 30px; background:rgba(2,4,8,.6); }
+.st-lbl { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+.st-body { font-size:14px; line-height:1.9; color:rgba(221,238,255,.85); letter-spacing:.01em; }
+.st-body .slot { color:var(--cyan); }
+.st-body .lvl { font-family:'Syne',sans-serif; font-weight:800; color:var(--cyan); }
+.copy-btn { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#020408; background:var(--cyan); border:none; padding:9px 20px; cursor:pointer; font-family:'DM Mono',monospace; transition:opacity .2s; }
+.copy-btn:hover { opacity:.85; }
+.copy-btn:disabled { background:rgba(85,102,136,.4); color:rgba(221,238,255,.4); cursor:not-allowed; }
+.nonconf { border:1px solid rgba(240,160,0,.3); background:rgba(240,160,0,.03); padding:16px 20px; font-size:11px; line-height:1.7; color:rgba(240,160,0,.85); margin-top:2px; }
+.nonconf b { color:var(--amber); }
+
+.footnote { width:100%; max-width:900px; margin-top:48px; padding-top:24px; border-top:1px solid rgba(0,232,200,.08); display:flex; justify-content:space-between; font-size:9px; letter-spacing:.12em; color:rgba(221,238,255,.15); text-transform:uppercase; gap:16px; flex-wrap:wrap; }
+
+@media (max-width:820px){
+  body { padding:40px 16px 60px; }
+  .doc-meta { text-align:left; }
+  .composer { grid-template-columns:1fr; }
+  .dims { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="doc-title">Apply the Outrush Readiness Standard</div>
+  <div class="doc-meta">Classification Statement Composer<br>Specification v1.0 · EVOutrush.com<br>Instrument · §6 conformant</div>
+</div>
+<div class="crumb"><a href="/">← EVOutrush</a> · <a href="/standard/">Governing Specification</a> · Apply</div>
+
+<div class="intro">
+  <h1>Describe a configuration. Compose its <em>conformant classification statement</em>.</h1>
+  <p>This instrument does not score, certify, rank, or judge any vendor. It classifies the <em>configuration you describe</em> — one vehicle or fleet, one export path, one site, one jurisdiction, at one point in time — by the rule set in §4 of the standard: a configuration holds the highest level whose boundary condition, and all lower boundary conditions, it satisfies.</p>
+  <p class="guard">A statement that omits its configuration description, its site/jurisdiction, or its date is <b>not conformant</b> (§6). A statement applied to a brand or product in general — rather than a described configuration — is not conformant.</p>
+</div>
+
+<div class="composer">
+  <!-- LEFT: configuration facts -->
+  <div class="panel">
+    <div class="panel-label">01 · The configuration</div>
+    <div class="field">
+      <label for="desc">Configuration description</label>
+      <textarea id="desc" placeholder="e.g. One 2025 bidirectional-capable sedan, DC export via a listed 11 kW bidirectional charger, at a single-family residence."></textarea>
+      <div class="hint">One vehicle/fleet · one export path · specific, described.</div>
+    </div>
+    <div class="field">
+      <label for="site">Site / jurisdiction</label>
+      <input id="site" type="text" placeholder="e.g. Residence, Lyon, France (Enedis territory)">
+    </div>
+    <div class="field">
+      <label for="date">As described on (date)</label>
+      <input id="date" type="date">
+    </div>
+    <div class="panel-label" style="margin-top:26px">03 · Dimensions examined</div>
+    <div class="dims" id="dims">
+      <label class="dim"><input type="checkbox" data-dim="D1 Permission"><span class="d-box"></span><span class="d-txt"><b>D1</b> Permission</span></label>
+      <label class="dim"><input type="checkbox" data-dim="D2 Equipment"><span class="d-box"></span><span class="d-txt"><b>D2</b> Equipment</span></label>
+      <label class="dim"><input type="checkbox" data-dim="D3 Battery"><span class="d-box"></span><span class="d-txt"><b>D3</b> Battery</span></label>
+      <label class="dim"><input type="checkbox" data-dim="D4 Destination"><span class="d-box"></span><span class="d-txt"><b>D4</b> Destination</span></label>
+      <label class="dim"><input type="checkbox" data-dim="D5 Operation"><span class="d-box"></span><span class="d-txt"><b>D5</b> Operation</span></label>
+      <label class="dim"><input type="checkbox" data-dim="D6 Economics"><span class="d-box"></span><span class="d-txt"><b>D6</b> Economics</span></label>
+    </div>
+  </div>
+
+  <!-- RIGHT: boundary conditions -->
+  <div class="panel">
+    <div class="panel-label">02 · Boundary conditions met — check each fact that is true of this configuration</div>
+    <div class="gates" id="gates"></div>
+  </div>
+</div>
+
+<div class="output-wrap">
+  <div class="result-level" id="resultLevel">
+    <div>
+      <div class="rl-tag">Determined level</div>
+      <div class="rl-code" id="rlCode" style="color:var(--steel)">—</div>
+    </div>
+    <div>
+      <div class="rl-name" id="rlName">No boundary condition met</div>
+    </div>
+    <div class="rl-read" id="rlRead">Check the boundary conditions this configuration actually satisfies, from O0 upward. The level is the highest state whose condition and all lower conditions are met.</div>
+  </div>
+
+  <div class="statement" id="statementBox">
+    <div class="st-lbl"><span>Classification statement · §6 form</span><button class="copy-btn" id="copyBtn" disabled>Copy statement</button></div>
+    <div class="st-body" id="stBody"></div>
+    <div class="nonconf" id="nonconf" style="display:none"></div>
+  </div>
+</div>
+
+<div class="footnote">
+  <span>© EVOutrush · Specification-only instrument · classifies configurations, not vendors</span>
+  <span>Outrush Readiness Standard v1.0</span>
+  <span>agent@sohadot.com</span>
+</div>
+
+<script>
+const LEVELS = [
+  { code:'O0', name:'Declared Capability', color:'#8899bb',
+    cond:'Bidirectional or export capability is claimed for the vehicle and/or equipment by its manufacturer or specification sheet.' },
+  { code:'O1', name:'Hardware Path', color:'#8844ff',
+    cond:'A complete physical export path exists — vehicle, connector, and export-capable supply equipment are present, compatible, and installed at the site.' },
+  { code:'O2', name:'Permitted Flow', color:'#4488ff',
+    cond:'The interconnection permission, utility agreement, or regulatory allowance required for export at this site and jurisdiction exists and covers this configuration.' },
+  { code:'O3', name:'Directed Flow', color:'#f0a000',
+    cond:'The destination is explicitly defined and configured — home, building, grid, emergency load, or fleet — with the protection and metering that destination requires in place.' },
+  { code:'O4', name:'Operated Flow', color:'#b8f000',
+    cond:'The flow runs under active operational management — battery-impact limits (including warranty terms), scheduling, safety interlocks, and monitoring are defined and in force.' },
+  { code:'O5', name:'Governed Flow', color:'#00e8c8',
+    cond:'A contract or tariff defines compensation or settlement, and operational and economic risks are explicitly allocated between parties.' }
+];
+const READ = {
+  '-1':'No boundary condition met — the configuration is below O0 (no export capability is even claimed).',
+  '0':'Capability state. Marketing language lives here. Nothing about a real, permitted, running flow is yet established.',
+  '1':'Capability state. A physical path exists, but lawfulness of export at this site is not yet established.',
+  '2':'Authorization state. Export is permitted here, but destination, protections, and metering are not yet defined.',
+  '3':'Definition state. The flow is directed and protected, but not yet operated under active management over time.',
+  '4':'Operation state. The flow is operated, but no one is yet accountable for its economics.',
+  '5':'Governance state. The flow is contractually and economically governed — for this configuration, at this point in time.'
+};
+
+const gatesEl = document.getElementById('gates');
+LEVELS.forEach((lv,i)=>{
+  const l=document.createElement('label');
+  l.className='gate'; l.style.borderLeftColor=lv.color; l.dataset.idx=i;
+  l.innerHTML=`<input type="checkbox" data-gate="${i}">
+    <div class="g-head"><span class="g-box"></span><span class="g-code" style="color:${lv.color}">${lv.code}</span><span class="g-name">${lv.name}</span></div>
+    <div class="g-cond">${lv.cond}</div>`;
+  gatesEl.appendChild(l);
+});
+
+const $=id=>document.getElementById(id);
+const desc=$('desc'), site=$('site'), dateEl=$('date');
+dateEl.valueAsDate=new Date();
+
+function determinedLevel(){
+  const boxes=[...document.querySelectorAll('[data-gate]')];
+  let n=-1;
+  for(let i=0;i<boxes.length;i++){ if(boxes[i].checked) n=i; else break; }
+  return n;
+}
+function fmtDate(v){
+  if(!v) return '';
+  const d=new Date(v+'T00:00:00');
+  return d.toLocaleDateString('en-CA'); // YYYY-MM-DD
+}
+
+function render(){
+  const n=determinedLevel();
+  // cap visuals: gates above the break, or checked-but-gated
+  const boxes=[...document.querySelectorAll('[data-gate]')];
+  document.querySelectorAll('.gate').forEach((g,i)=>{
+    g.classList.toggle('capped', boxes[i].checked && i>n);
+  });
+
+  const lvl = n>=0 ? LEVELS[n] : null;
+  $('rlCode').textContent = lvl?lvl.code:'—';
+  $('rlCode').style.color = lvl?lvl.color:'var(--steel)';
+  $('rlName').textContent = lvl?lvl.name:'No boundary condition met';
+  $('rlRead').textContent = READ[String(n)];
+
+  const dims=[...document.querySelectorAll('[data-dim]')].filter(c=>c.checked).map(c=>c.dataset.dim);
+  const dDesc=desc.value.trim(), dSite=site.value.trim(), dDate=fmtDate(dateEl.value);
+
+  const missing=[];
+  if(!dDesc) missing.push('configuration description');
+  if(!dSite) missing.push('site / jurisdiction');
+  if(!dDate) missing.push('date');
+
+  const stBody=$('stBody'), nonconf=$('nonconf'), copyBtn=$('copyBtn');
+
+  if(n<0){
+    stBody.innerHTML='<span style="color:rgba(221,238,255,.4)">Below O0 — no classification. Check O0 if export capability is at least claimed for this configuration.</span>';
+    nonconf.style.display='none'; copyBtn.disabled=true; copyBtn.dataset.text=''; return;
+  }
+
+  const dimsText = dims.length ? dims.join(', ') : 'none stated';
+  const basis = LEVELS.slice(0,n+1).map(l=>l.code+' — '+l.cond.replace(/\.$/,'')).join('; ');
+
+  const html = `Configuration <span class="slot">${dDesc||'[description]'}</span>, at <span class="slot">${dSite||'[site/jurisdiction]'}</span>, `
+    + `as described on <span class="slot">${dDate||'[date]'}</span>, classifies as <span class="lvl">${lvl.code}</span> `
+    + `under the Outrush Readiness Standard v1.0. Dimensions examined: <span class="slot">${dimsText}</span>. `
+    + `Basis: <span class="slot">${basis}</span>.`;
+  stBody.innerHTML=html;
+
+  const plain = `Configuration ${dDesc}, at ${dSite}, as described on ${dDate}, classifies as ${lvl.code} under the Outrush Readiness Standard v1.0. Dimensions examined: ${dimsText}. Basis: ${basis}.`;
+  copyBtn.dataset.text=plain;
+
+  if(missing.length){
+    nonconf.style.display='block';
+    nonconf.innerHTML=`<b>Not conformant (§6).</b> This statement omits its ${missing.join(', ')}. A statement that omits its basis, its date, or its configuration description is not conformant — fill the missing field(s) before citing it.`;
+    copyBtn.disabled=true;
+  } else {
+    nonconf.style.display='none';
+    copyBtn.disabled=false;
+  }
+}
+
+document.addEventListener('input', render);
+document.addEventListener('change', render);
+$('copyBtn').addEventListener('click', async e=>{
+  const t=e.target.dataset.text; if(!t) return;
+  try{ await navigator.clipboard.writeText(t); e.target.textContent='Copied ✓'; setTimeout(()=>e.target.textContent='Copy statement',1600); }
+  catch{ e.target.textContent='Copy failed'; setTimeout(()=>e.target.textContent='Copy statement',1600); }
+});
+render();
+</script>
+
+</body>
+</html>
