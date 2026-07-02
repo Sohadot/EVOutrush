@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Outrush Readiness Standard v1.0 — Governing Specification | EVOutrush</title>
+<meta name="description" content="The governing text of the Outrush Readiness Standard v1.0: the canonical definition, the O-Scale (O0–O5), the Six Readiness Dimensions, classification statement format, and governance. A specification-only category artifact for reverse energy flow from electric vehicles.">
+<link rel="canonical" href="https://evoutrush.com/standard/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EVOutrush">
+<meta property="og:title" content="The Outrush Readiness Standard v1.0 — Governing Specification">
+<meta property="og:description" content="V2X tells you what is possible. Outrush Readiness tells you what is ready. The canonical definition, the O-Scale (O0–O5), and the Six Readiness Dimensions.">
+<meta property="og:url" content="https://evoutrush.com/standard/">
+<meta property="article:published_time" content="2026-07-02">
+<meta property="article:modified_time" content="2026-07-02">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Outrush Readiness Standard v1.0">
+<meta name="twitter:description" content="V2X tells you what is possible. Outrush Readiness tells you what is ready. The governing specification: canonical definition, O-Scale, Six Readiness Dimensions.">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --void: #020408;
+  --cyan: #00e8c8;
+  --lime: #b8f000;
+  --amber: #f0a000;
+  --blue: #0066ff;
+  --violet: #8844ff;
+  --steel: #556688;
+  --white: #ddeeff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+html,body { width:100%; min-height:100vh; background:var(--void); color:var(--white); font-family:'DM Mono', monospace; overflow-x:hidden; }
+body { display:flex; flex-direction:column; align-items:center; padding:60px 24px 80px; }
+
+a { color:var(--cyan); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* ── HEADER ── */
+.doc-header { width:100%; max-width:820px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid rgba(0,232,200,0.12); padding-bottom:24px; gap:24px; flex-wrap:wrap; }
+.doc-title { font-family:'Syne',sans-serif; font-size:13px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.5); }
+.doc-meta { font-size:10px; letter-spacing:.15em; color:rgba(221,238,255,.2); text-transform:uppercase; text-align:right; line-height:1.8; }
+.crumb { width:100%; max-width:820px; margin-bottom:40px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(221,238,255,.3); }
+
+/* ── DOCUMENT META STRIP ── */
+.meta-strip { width:100%; max-width:820px; display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-bottom:56px; }
+.ms-cell { border:1px solid rgba(0,232,200,.08); padding:16px 18px; background:rgba(2,4,8,.5); }
+.ms-label { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:rgba(0,232,200,.35); margin-bottom:8px; }
+.ms-val { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--white); line-height:1.4; }
+
+/* ── SECTIONS ── */
+.doc { width:100%; max-width:820px; }
+section { margin-bottom:56px; }
+.sec-num { font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:14px; }
+h2 { font-family:'Syne',sans-serif; font-size:clamp(20px,2.6vw,28px); font-weight:800; letter-spacing:-.01em; color:var(--white); margin-bottom:20px; line-height:1.25; }
+h3 { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--white); margin:24px 0 8px; letter-spacing:.01em; }
+p { font-size:13px; line-height:1.85; color:rgba(221,238,255,.6); margin-bottom:16px; letter-spacing:.01em; }
+p strong, li strong { color:rgba(221,238,255,.9); font-weight:500; }
+em { color:var(--cyan); font-style:normal; }
+ul { list-style:none; margin:0 0 16px; }
+li { font-size:13px; line-height:1.8; color:rgba(221,238,255,.6); margin-bottom:12px; padding-left:20px; position:relative; }
+li::before { content:'—'; position:absolute; left:0; color:rgba(0,232,200,.4); }
+
+/* ── CANONICAL DEFINITION BLOCK ── */
+.canon { border:1px solid rgba(0,232,200,.15); padding:36px 40px; background:rgba(0,232,200,.02); margin-bottom:20px; }
+.canon-label { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:20px; }
+.canon-text { font-family:'Syne',sans-serif; font-size:clamp(17px,2.3vw,23px); font-weight:700; line-height:1.45; color:var(--white); }
+.canon-text em { color:var(--cyan); }
+.canon-note { margin-top:20px; padding-top:18px; border-top:1px solid rgba(0,232,200,.08); font-size:11px; line-height:1.8; color:rgba(221,238,255,.4); }
+
+/* ── PULL QUOTE ── */
+.pull { border-left:2px solid rgba(0,232,200,.4); padding:8px 0 8px 24px; margin:24px 0; font-family:'Syne',sans-serif; font-size:clamp(15px,2vw,19px); font-weight:700; line-height:1.4; color:rgba(221,238,255,.9); }
+.pull em { color:var(--cyan); }
+
+/* ── O-SCALE LEVELS ── */
+.olevel { border:1px solid rgba(0,232,200,.08); border-left-width:3px; padding:20px 24px; margin-bottom:2px; background:rgba(2,4,8,.5); }
+.ol-head { display:flex; align-items:baseline; gap:14px; margin-bottom:12px; flex-wrap:wrap; }
+.ol-code { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; }
+.ol-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--white); }
+.ol-row { display:grid; grid-template-columns:130px 1fr; gap:14px; margin-bottom:8px; }
+.ol-key { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:rgba(0,232,200,.35); padding-top:2px; }
+.ol-txt { font-size:12px; line-height:1.7; color:rgba(221,238,255,.55); }
+.ol-not .ol-txt { color:rgba(221,238,255,.38); }
+
+/* ── DIMENSIONS TABLE ── */
+.dim-table { border:1px solid rgba(0,232,200,.1); }
+.dim-row { display:grid; grid-template-columns:60px 150px 1fr; gap:16px; padding:16px 22px; border-bottom:1px solid rgba(0,232,200,.05); align-items:baseline; }
+.dim-row:last-child { border-bottom:none; }
+.dim-row.head { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(221,238,255,.25); }
+.dim-id { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; }
+.dim-name { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:var(--white); }
+.dim-q { font-size:12px; line-height:1.65; color:rgba(221,238,255,.5); }
+
+/* ── AMENDMENT TABLE ── */
+.amd-table { border:1px solid rgba(0,232,200,.1); }
+.amd-row { display:grid; grid-template-columns:90px 120px 1fr; gap:16px; padding:14px 22px; border-bottom:1px solid rgba(0,232,200,.05); }
+.amd-row:last-child { border-bottom:none; }
+.amd-row.head { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(221,238,255,.25); }
+.amd-v { font-family:'Syne',sans-serif; font-weight:700; color:var(--white); font-size:13px; }
+.amd-c { font-size:12px; line-height:1.6; color:rgba(221,238,255,.5); }
+
+/* ── STATEMENT FORMAT ── */
+.stmt { border:1px dashed rgba(0,232,200,.25); padding:24px 28px; background:rgba(2,4,8,.5); margin:20px 0; font-size:13px; line-height:1.8; color:rgba(221,238,255,.7); font-style:normal; }
+.stmt em { color:var(--cyan); }
+
+/* ── ACQUISITION SEAL ── */
+.acq-seal { width:100%; max-width:820px; margin-top:24px; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; border:1px solid rgba(0,232,200,.15); padding:32px 40px; background:rgba(0,232,200,.02); }
+.acq-tag { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(0,232,200,.4); margin-bottom:10px; }
+.acq-domain { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; letter-spacing:-.02em; color:var(--cyan); }
+.acq-sub { font-size:10px; color:rgba(221,238,255,.25); margin-top:6px; line-height:1.7; letter-spacing:.05em; }
+.acq-btn { display:inline-block; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:#020408; background:var(--cyan); padding:12px 28px; text-decoration:none; white-space:nowrap; transition:opacity .2s; }
+.acq-btn:hover { opacity:.85; text-decoration:none; }
+.acq-btn:focus-visible { outline:2px solid var(--white); outline-offset:3px; }
+
+/* ── FOOTNOTE ── */
+.footnote { width:100%; max-width:820px; margin-top:48px; padding-top:24px; border-top:1px solid rgba(0,232,200,.08); display:flex; justify-content:space-between; font-size:9px; letter-spacing:.12em; color:rgba(221,238,255,.15); text-transform:uppercase; gap:16px; flex-wrap:wrap; }
+
+@media (max-width: 720px) {
+  body { padding:40px 16px 60px; }
+  .doc-meta { text-align:left; }
+  .meta-strip { grid-template-columns:1fr 1fr; }
+  .canon { padding:24px; }
+  .ol-row { grid-template-columns:1fr; gap:4px; }
+  .dim-row { grid-template-columns:44px 1fr; }
+  .dim-row .dim-q { grid-column:1 / -1; }
+  .dim-row.head { display:none; }
+  .amd-row { grid-template-columns:1fr; gap:4px; }
+  .amd-row.head { display:none; }
+  .acq-seal { grid-template-columns:1fr; gap:24px; padding:24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="doc-title">The Outrush Readiness Standard</div>
+  <div class="doc-meta">Governing Specification v1.0<br>Category Artifact · EVOutrush.com<br>Issued 2026-07-02</div>
+</div>
+<div class="crumb"><a href="/">← EVOutrush</a> · Reference Specification</div>
+
+<!-- ── DOCUMENT META STRIP ── -->
+<div class="meta-strip">
+  <div class="ms-cell"><div class="ms-label">Document class</div><div class="ms-val">Category Artifact · Reference Specification</div></div>
+  <div class="ms-cell"><div class="ms-label">Version</div><div class="ms-val">1.0 · Governing</div></div>
+  <div class="ms-cell"><div class="ms-label">Steward</div><div class="ms-val">Sohadot</div></div>
+  <div class="ms-cell"><div class="ms-label">Scope</div><div class="ms-val">Specification only</div></div>
+</div>
+
+<div class="doc">
+
+  <!-- ── 1. CANONICAL DEFINITION ── -->
+  <section id="definition">
+    <div class="sec-num">01 · Canonical Definition</div>
+    <div class="canon">
+      <div class="canon-label">Canonical — reproduced verbatim wherever the asset speaks</div>
+      <div class="canon-text"><em>Outrush Readiness</em> is the actual-readiness layer for reverse energy flow from electric vehicles — the measured distance between declared capability and a flow that is permitted, supported, safe, directed, operated, and economically governed.</div>
+      <div class="canon-note">This definition is canonical. It is reproduced verbatim wherever the asset speaks — site, repository, correspondence, and public signals. Variations are not permitted; paraphrase dilutes ownership.</div>
+    </div>
+  </section>
+
+  <!-- ── 2. POSITION ── -->
+  <section id="position">
+    <div class="sec-num">02 · Position Relative to Existing Language</div>
+    <h2>It sits above the existing vocabulary — it does not compete with it.</h2>
+    <p>The reverse-flow field already has established vocabulary: <strong>V2G, V2H, V2B, V2L, V2X</strong> describe <em>directions and interfaces</em> of vehicle energy export, and standards such as <strong>ISO 15118</strong> and <strong>OCPP</strong> govern <em>communication and protocol capability</em>.</p>
+    <p>The Outrush Readiness Standard does not compete with, replace, or re-define any of these. It sits <strong>above</strong> them and asks a question none of them answers:</p>
+    <div class="pull">V2X tells you what is possible. <em>Outrush Readiness tells you what is ready.</em></div>
+    <p>The industry's persistent gap is the distance between a bidirectional capability printed on a specification sheet and an energy flow that actually runs — lawfully, safely, and under settled economics — at a specific site, today. That distance has no established name and no established classification. This standard names and classifies it.</p>
+  </section>
+
+  <!-- ── 3. SCOPE ── -->
+  <section id="scope">
+    <div class="sec-num">03 · Scope and Non-Scope</div>
+    <h2>Specification only. This boundary is what makes the standard durable.</h2>
+    <p><strong>In scope.</strong> A classification vocabulary (the O-Scale) and a dimensional checklist (the Six Readiness Dimensions) for describing the readiness state of a <em>specific, described configuration</em>: one vehicle or fleet, one export path, one site, one jurisdiction, at one point in time.</p>
+    <h3>Out of scope — permanently</h3>
+    <ul>
+      <li><strong>No measurement.</strong> The standard defines states; it does not measure, score, weight, or index anything. There is no composite number, no "Outrush Index," and no ranking.</li>
+      <li><strong>No certification.</strong> The standard does not certify, audit, approve, or endorse any product, vendor, site, or program. No party may claim to be "Outrush certified."</li>
+      <li><strong>No verdicts on subjects.</strong> Following the Artifact–Subject Separation principle: the standard classifies <em>configurations as described</em>, never companies, brands, or products as such. A classification is a statement about a described configuration, not a judgment of its owner.</li>
+      <li><strong>No field data.</strong> The standard cites no market statistics, adoption figures, or investment totals. Empirical claims about the EV market belong to their primary sources, not to this specification.</li>
+    </ul>
+    <p>This boundary is what makes the standard durable. A specification that starts performing verdicts, scores, or market commentary contaminates its own authority.</p>
+  </section>
+
+  <!-- ── 4. O-SCALE ── -->
+  <section id="o-scale">
+    <div class="sec-num">04 · The O-Scale — Six States of Outrush Readiness</div>
+    <h2>Each level is a boundary condition and an explicit non-implication.</h2>
+    <p>A configuration holds the highest level whose boundary condition — and all lower boundary conditions — it satisfies.</p>
+
+    <div class="olevel" style="border-left-color:#8899bb">
+      <div class="ol-head"><span class="ol-code" style="color:#8899bb">O0</span><span class="ol-name">Declared Capability</span></div>
+      <div class="ol-row ol-cond"><span class="ol-key">Boundary</span><span class="ol-txt">Bidirectional or export capability is claimed for the vehicle and/or equipment by its manufacturer or specification sheet. Nothing beyond the claim is established.</span></div>
+      <div class="ol-row ol-not"><span class="ol-key">Does not imply</span><span class="ol-txt">That any export path physically exists, is permitted, or has ever operated.</span></div>
+    </div>
+
+    <div class="olevel" style="border-left-color:#8844ff">
+      <div class="ol-head"><span class="ol-code" style="color:#8844ff">O1</span><span class="ol-name">Hardware Path</span></div>
+      <div class="ol-row ol-cond"><span class="ol-key">Boundary</span><span class="ol-txt">A complete physical export path exists — vehicle, connector, and export-capable supply equipment are present, compatible, and installed at the site.</span></div>
+      <div class="ol-row ol-not"><span class="ol-key">Does not imply</span><span class="ol-txt">That exporting energy at this site is lawful or authorized.</span></div>
+    </div>
+
+    <div class="olevel" style="border-left-color:#4488ff">
+      <div class="ol-head"><span class="ol-code" style="color:#4488ff">O2</span><span class="ol-name">Permitted Flow</span></div>
+      <div class="ol-row ol-cond"><span class="ol-key">Boundary</span><span class="ol-txt">The authorization layer is settled — the interconnection permission, utility agreement, or regulatory allowance required for export at this site and jurisdiction exists and covers this configuration.</span></div>
+      <div class="ol-row ol-not"><span class="ol-key">Does not imply</span><span class="ol-txt">That the destination, protections, or metering of the flow are defined.</span></div>
+    </div>
+
+    <div class="olevel" style="border-left-color:#f0a000">
+      <div class="ol-head"><span class="ol-code" style="color:#f0a000">O3</span><span class="ol-name">Directed Flow</span></div>
+      <div class="ol-row ol-cond"><span class="ol-key">Boundary</span><span class="ol-txt">The destination of the export is explicitly defined and configured — home, building, grid, emergency load, or fleet application — with the protection and metering arrangement that destination requires in place.</span></div>
+      <div class="ol-row ol-not"><span class="ol-key">Does not imply</span><span class="ol-txt">That the flow is managed within battery, safety, and scheduling constraints over time.</span></div>
+    </div>
+
+    <div class="olevel" style="border-left-color:#b8f000">
+      <div class="ol-head"><span class="ol-code" style="color:#b8f000">O4</span><span class="ol-name">Operated Flow</span></div>
+      <div class="ol-row ol-cond"><span class="ol-key">Boundary</span><span class="ol-txt">The flow runs under active operational management — battery-impact limits (including warranty terms), scheduling, safety interlocks, and monitoring are defined and in force.</span></div>
+      <div class="ol-row ol-not"><span class="ol-key">Does not imply</span><span class="ol-txt">That anyone is accountable for the economics or that the flow is compensated.</span></div>
+    </div>
+
+    <div class="olevel" style="border-left-color:#00e8c8">
+      <div class="ol-head"><span class="ol-code" style="color:#00e8c8">O5</span><span class="ol-name">Governed Flow</span></div>
+      <div class="ol-row ol-cond"><span class="ol-key">Boundary</span><span class="ol-txt">The flow operates under explicit contractual and economic governance — a contract or tariff defines compensation or settlement, and operational and economic risks are explicitly allocated between parties.</span></div>
+      <div class="ol-row ol-not"><span class="ol-key">Non-implication</span><span class="ol-txt">O5 is a state of a configuration at a point in time, not a permanent status. Any change in equipment, permission, destination, operation, or contract re-opens the classification.</span></div>
+    </div>
+
+    <div class="pull" style="margin-top:28px">Reading of the scale: O0–O1 are <em>capability</em> states. O2–O3 are <em>authorization and definition</em> states. O4–O5 are <em>operation and governance</em> states. The industry's marketing language lives almost entirely at O0; the industry's working reality is decided at O2 and above.</div>
+  </section>
+
+  <!-- ── 5. DIMENSIONS ── -->
+  <section id="dimensions">
+    <div class="sec-num">05 · The Six Readiness Dimensions</div>
+    <h2>The O-Scale says what state. The dimensions say what to examine.</h2>
+    <p>Each dimension is a question, not a metric. They carry <strong>no weights and no scores</strong> — they are examination headings. A classification statement cites the dimensions examined and the level concluded, nothing more.</p>
+    <div class="dim-table">
+      <div class="dim-row head"><span>#</span><span>Dimension</span><span>The question it asks</span></div>
+      <div class="dim-row"><span class="dim-id" style="color:#0066ff">D1</span><span class="dim-name">Permission</span><span class="dim-q">Is this outward flow allowed — by regulator, utility, and site authority?</span></div>
+      <div class="dim-row"><span class="dim-id" style="color:#8844ff">D2</span><span class="dim-name">Equipment</span><span class="dim-q">Does the full charger/supply path support export, end to end?</span></div>
+      <div class="dim-row"><span class="dim-id" style="color:#b8f000">D3</span><span class="dim-name">Battery</span><span class="dim-q">Can the battery bear this flow — within warranty, degradation, and thermal terms?</span></div>
+      <div class="dim-row"><span class="dim-id" style="color:#f0a000">D4</span><span class="dim-name">Destination</span><span class="dim-q">Is the destination defined — home, building, grid, emergency load, fleet — with its required protections?</span></div>
+      <div class="dim-row"><span class="dim-id" style="color:#00e8c8">D5</span><span class="dim-name">Operation</span><span class="dim-q">Is the flow operated — limits, schedules, interlocks, monitoring?</span></div>
+      <div class="dim-row"><span class="dim-id" style="color:#ddeeff">D6</span><span class="dim-name">Economics</span><span class="dim-q">Are the economics and risks of the flow explicitly settled between parties?</span></div>
+    </div>
+  </section>
+
+  <!-- ── 6. STATEMENT FORMAT ── -->
+  <section id="statement">
+    <div class="sec-num">06 · Classification Statement Format</div>
+    <h2>A conformant classification statement has exactly this form.</h2>
+    <div class="stmt">"Configuration <em>[description]</em>, at <em>[site/jurisdiction]</em>, as described on <em>[date]</em>, classifies as <em>O[n]</em> under the Outrush Readiness Standard v1.0. Dimensions examined: <em>[list]</em>. Basis: <em>[the described facts satisfying each boundary condition up to O(n)]</em>."</div>
+    <p>A statement that omits its basis, its date, or its configuration description is not conformant. A statement applied to a brand or product in general — rather than a described configuration — is not conformant.</p>
+  </section>
+
+  <!-- ── 7. GOVERNANCE ── -->
+  <section id="governance">
+    <div class="sec-num">07 · Governance</div>
+    <h2>The version history is the priority record of the category.</h2>
+    <ul>
+      <li><strong>Change control.</strong> The canonical definition (§1), the O-Scale boundary conditions (§4), and the specification-only boundary (§3) may change only by explicit versioned amendment recorded in this document's history. No silent edits.</li>
+      <li><strong>Precedence.</strong> Where any public page, post, or summary of this asset conflicts with this document, this document governs.</li>
+      <li><strong>Provenance.</strong> The version history of this file constitutes the priority record of the category definition and the O-Scale.</li>
+      <li><strong>Income boundary.</strong> Any future commercial use of the asset must extend the authority of the specification; it must never contaminate it (no paid certifications, no sponsored classifications, no scored rankings for hire).</li>
+    </ul>
+  </section>
+
+  <!-- ── 8. AMENDMENT HISTORY ── -->
+  <section id="history">
+    <div class="sec-num">08 · Amendment History</div>
+    <div class="amd-table">
+      <div class="amd-row head"><span>Version</span><span>Date</span><span>Change</span></div>
+      <div class="amd-row"><span class="amd-v">1.0</span><span class="amd-c">2026-07-02</span><span class="amd-c">Initial governing version. Canonical definition, O0–O5 scale, six dimensions, specification-only scope.</span></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ── ACQUISITION SEAL ── -->
+<div class="acq-seal">
+  <div class="acq-left">
+    <div class="acq-tag">Strategic Asset · Private Acquisition Channel</div>
+    <div class="acq-domain">EVOutrush.com</div>
+    <div class="acq-sub">
+      Domain · The Outrush Readiness Standard · O-Scale (O0–O5)<br>
+      Six Readiness Dimensions · Canonical Definition · Governance Record
+    </div>
+  </div>
+  <a href="mailto:agent@sohadot.com" class="acq-btn">Request Strategic Brief →</a>
+</div>
+
+<div class="footnote">
+  <span>© EVOutrush · Reference Specification · All rights reserved</span>
+  <span>Outrush Readiness Standard v1.0 · Issued 2026-07-02</span>
+  <span>agent@sohadot.com · sohadot.com</span>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "DefinedTermSet",
+      "@id": "https://evoutrush.com/standard/#o-scale",
+      "name": "The Outrush Readiness Standard — O-Scale",
+      "description": "A specification-only classification vocabulary describing the actual-readiness state of reverse energy flow (vehicle-to-everything export) for a specific described configuration, from O0 Declared Capability to O5 Governed Flow.",
+      "url": "https://evoutrush.com/standard/",
+      "inDefinedTermSet": "https://evoutrush.com/standard/",
+      "hasDefinedTerm": [
+        { "@type": "DefinedTerm", "name": "O0 · Declared Capability", "description": "Export capability is claimed by the manufacturer or specification sheet. Nothing beyond the claim is established." },
+        { "@type": "DefinedTerm", "name": "O1 · Hardware Path", "description": "A complete physical export path exists — vehicle, connector, and export-capable supply equipment installed and compatible at the site." },
+        { "@type": "DefinedTerm", "name": "O2 · Permitted Flow", "description": "The authorization layer is settled — interconnection permission, utility agreement, or regulatory allowance covers this configuration at this site and jurisdiction." },
+        { "@type": "DefinedTerm", "name": "O3 · Directed Flow", "description": "The destination of the export is explicitly defined and configured — home, building, grid, emergency load, or fleet — with the protection and metering it requires." },
+        { "@type": "DefinedTerm", "name": "O4 · Operated Flow", "description": "The flow runs under active operational management — battery-impact limits including warranty terms, scheduling, safety interlocks, and monitoring in force." },
+        { "@type": "DefinedTerm", "name": "O5 · Governed Flow", "description": "A contract or tariff defines compensation or settlement, and operational and economic risks are explicitly allocated between parties." }
+      ]
+    },
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://evoutrush.com/#outrush-readiness",
+      "name": "Outrush Readiness",
+      "description": "Outrush Readiness is the actual-readiness layer for reverse energy flow from electric vehicles — the measured distance between declared capability and a flow that is permitted, supported, safe, directed, operated, and economically governed.",
+      "inDefinedTermSet": "https://evoutrush.com/standard/#o-scale",
+      "url": "https://evoutrush.com/standard/"
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://evoutrush.com/standard/#article",
+      "headline": "The Outrush Readiness Standard v1.0 — Governing Specification",
+      "description": "The governing text of the Outrush Readiness Standard: canonical definition, the O-Scale (O0–O5), the Six Readiness Dimensions, classification statement format, and governance.",
+      "url": "https://evoutrush.com/standard/",
+      "datePublished": "2026-07-02",
+      "dateModified": "2026-07-02",
+      "inLanguage": "en",
+      "version": "1.0",
+      "about": { "@id": "https://evoutrush.com/#outrush-readiness" },
+      "author": { "@type": "Organization", "name": "Sohadot", "url": "https://sohadot.com" },
+      "publisher": { "@type": "Organization", "name": "EVOutrush", "url": "https://evoutrush.com/" }
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
